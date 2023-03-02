@@ -38,7 +38,7 @@ a {
   box-shadow: 1px 2px 3px #b1b1b1;
   display: flex;
   justify-content: space-between;
-  align-self: center;
+  align-items: center;
 }
 .nav-bar div {
   display: flex;

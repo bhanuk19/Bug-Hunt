@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import Report from "./components/report";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./components/error";
@@ -9,9 +9,11 @@ import Signup from "./components/signup";
 import Dashboard from "./components/dashboard";
 import Fix from "./components/fix";
 import Fixes from "./components/fixes";
+import Auth from "./components/auth";
+
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/bug-hunter",
     element: <Root />,
     children: [
       {
@@ -43,6 +45,10 @@ const router = createBrowserRouter([
         element: <Admin />,
       },
       {
+        path: "authenticate",
+        element: <Auth />,
+      },
+      {
         path: "*",
         element: <ErrorPage />,
       },
@@ -50,7 +56,7 @@ const router = createBrowserRouter([
   },
 ]);
 export default function App() {
-  const [selectedBug, setSelected] = useState("null");
+  
   return (
     <React.StrictMode>
       <RouterProvider router={router} />

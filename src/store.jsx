@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import bugSetReducer from "./reducers/selectBug";
+import globalSetter from "./reducers/globalStates";
+
 export default configureStore({
-  reducer: { selectedBug: bugSetReducer },
+  reducer: { globalStates: globalSetter },
 });

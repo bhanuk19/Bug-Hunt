@@ -1,16 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import FixModal from "./fixmodal";
+import { FixModal } from "./modals";
 import { useNavigate } from "react-router-dom";
+import { sortDateAscend, sortDateDesc } from "../functions/filters";
 import axios from "axios";
 export default function Fixes() {
   const navigate = useNavigate();
-  const tableHead = [
-    "FixID",
-    "BugID",
-    "Description",
-    "Date",
-    "Action",
-  ];
+  const tableHead = ["FixID", "Description", "Status", "Date", "Action"];
   const [fixes, setFixed] = useState(false);
   const [action, setAction] = useState(false);
   const [fixID, setID] = useState(null);
@@ -30,7 +26,7 @@ export default function Fixes() {
       .then((response) => {
         if (response.data?.auth === false) {
           alert("Unauthorized");
-          navigate("/dashboard", { replace: true });
+          navigate("/dashboard");
         } else {
           setFixed(response.data);
         }
@@ -40,10 +36,13 @@ export default function Fixes() {
     setID(e.target.parentNode.parentNode.id);
     setVisibility(true);
   };
-  //   const setModal = () =>{
 
-  //   }
-  //   setInterval(getBugs, 1000);
+  const [ascend, setAscend] = useState(false);
+  const sortFunction = () => {
+    ascend ? setFixed(sortDateDesc(fixes)) : setFixed(sortDateAscend(fixes));
+    setAscend(!ascend);
+  };
+
   useEffect(getFixes, [action]);
   return fixes ? (
     <>
@@ -52,9 +51,23 @@ export default function Fixes() {
         <table className="bug-list">
           <thead>
             <tr>
-              {tableHead.map((ele, index) => {
-                return <th key={index}>{ele}</th>;
-              })}
+              {tableHead.map((ele, index) =>
+                ele !== "Date" ? (
+                  <th key={index}>{ele}</th>
+                ) : (
+                  <th
+                    key={index}
+                    id="datehead"
+                    style={{ cursor: "pointer" }}
+                    onClick={sortFunction}
+                  >
+                    {ele}
+                    <span id="sorticon" style={{ marginLeft: "10px" }}>
+                      <i className="fa-solid fa-sort"></i>
+                    </span>
+                  </th>
+                )
+              )}
             </tr>
           </thead>
           <tbody>
@@ -62,9 +75,8 @@ export default function Fixes() {
               return (
                 <tr key={fix._id} className="fix-bug-list-element" id={fix._id}>
                   <td>{fix._id}</td>
-                  <td>{fix.bugID}</td>
                   <td>{fix.fixDescription.substr(0, 15) + "...."}</td>
-
+                  <td>{fix.status}</td>
                   <td>{fix.createdAt.substr(0, 10)}</td>
                   <td>
                     <button

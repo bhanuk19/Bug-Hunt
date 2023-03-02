@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 // import * as R from "ramda";
-import Modal from "./modal";
+import { sortDateAscend, sortDateDesc } from "../functions/filters";
+import { Modal } from "./modals";
 import { useNavigate } from "react-router-dom";
-import { replace } from "ramda";
 export default function Admin() {
   const navigate = useNavigate();
   const tableHead = [
@@ -19,6 +20,7 @@ export default function Admin() {
   const [action, setAction] = useState(false);
   const [bugID, setID] = useState(null);
   const [modalVisibility, setVisibility] = useState(false);
+  const [ascend, setAscend] = useState(false);
   const getBugs = () => {
     setVisibility(null);
     axios
@@ -34,7 +36,7 @@ export default function Admin() {
       .then((response) => {
         if (response.data?.auth === false) {
           alert("Unauthorized");
-          navigate("/dashboard", { replace: true });
+          navigate("/dashboard");
         } else {
           setReported(response.data);
         }
@@ -50,7 +52,12 @@ export default function Admin() {
   //   setInterval(getBugs, 1000);
   useEffect(getBugs, [action]);
   useEffect(() => {}, [bugID, modalVisibility, reportedBugs]);
-
+  const sortFunction = () => {
+    ascend
+      ? setReported(sortDateDesc(reportedBugs))
+      : setReported(sortDateAscend(reportedBugs));
+    setAscend(!ascend);
+  };
   return reportedBugs ? (
     <>
       <div className="form-div">
@@ -58,9 +65,23 @@ export default function Admin() {
         <table className="bug-list">
           <thead>
             <tr>
-              {tableHead.map((ele, index) => {
-                return <th key={index}>{ele}</th>;
-              })}
+              {tableHead.map((ele, index) =>
+                ele !== "Date" ? (
+                  <th key={index}>{ele}</th>
+                ) : (
+                  <th
+                    key={index}
+                    id="datehead"
+                    style={{ cursor: "pointer" }}
+                    onClick={sortFunction}
+                  >
+                    {ele}
+                    <span id="sorticon" style={{ marginLeft: "10px" }}>
+                      <i className="fa-solid fa-sort"></i>
+                    </span>
+                  </th>
+                )
+              )}
             </tr>
           </thead>
           <tbody>
