@@ -1,0 +1,12 @@
+if (!logged) {
+      if (checkAuth()) {
+        dispatcher(
+          setLogins([true, cookie.get("username")]),
+          setAdmin((cookie.get("role")==='true'))
+        );
+
+        navigate("/bug-hunter");
+      } else {
+        navigate("/bug-hunter/login");
+      }
+    }

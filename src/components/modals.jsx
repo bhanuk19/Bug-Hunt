@@ -5,7 +5,8 @@ import "../Styles/style.css";
 import { useDispatch } from "react-redux";
 import { setSelected } from "../reducers/globalStates";
 import { useNavigate } from "react-router-dom";
-import { current } from "@reduxjs/toolkit";
+import Cookies from "universal-cookie";
+
 export const Modal = ({
   setAction,
   action,
@@ -14,14 +15,19 @@ export const Modal = ({
   id,
   bugs,
 }) => {
+  const cookie = new Cookies();
   const bug = R.find(R.propEq("_id", id), bugs);
   const handleApproval = (e) => {
-    let bugID = bug._id;
+    let bugID = bug["_id"];
     window.confirm("Are you sure you want to Approve this Bug")
       ? axios
           .post(
             "/updateStatus",
-            { id: bugID, updateStatus: "Approved" },
+            {
+              id: bugID,
+              updateStatus: "Approved",
+              sid: cookie.get("session_id"),
+            },
             {
               headers: { "Content-Type": "application/json" },
             }
@@ -36,12 +42,16 @@ export const Modal = ({
   };
 
   const handleReject = (e) => {
-    let bugID = bug._id;
+    let bugID = bug["_id"];
     window.confirm("Are you sure you want to reject")
       ? axios
           .post(
             "/updateStatus",
-            { id: bugID, updateStatus: "Rejected" },
+            {
+              id: bugID,
+              updateStatus: "Rejected",
+              sid: cookie.get("session_id"),
+            },
             {
               headers: { "Content-Type": "application/json" },
             }
@@ -64,7 +74,7 @@ export const Modal = ({
       </span>
       <span>
         <b>ID: </b>
-        {bug._id}
+        {bug["_id"]}
       </span>
       <span>
         <b>Bug: </b>
@@ -138,20 +148,28 @@ export const FixModal = ({
   id,
   bugs,
 }) => {
+  const cookie = new Cookies();
   const bug = R.find(R.propEq("_id", id), bugs);
+  const navigate = useNavigate();
   const handleApproval = (e) => {
-    let fixID = bug._id;
-    window.confirm("Are you sure you want to Approve this Fixsx")
+    let fixID = bug["_id"];
+    window.confirm("Are you sure you want to Approve this Fix")
       ? axios
           .post(
             "/fixhandle",
-            { id: fixID, bugID: bug.bugID, updateStatus: "Fixed" },
+            {
+              id: fixID,
+              bugID: bug.bugID,
+              updateStatus: "Fixed",
+              sid: cookie.get("session_id"),
+            },
             {
               headers: { "Content-Type": "application/json" },
             }
           )
           .then(() => {
             setAction(!action);
+            navigate("/bug-hunter/dashboard");
           })
           .catch((error) => {
             console.log(error);
@@ -160,18 +178,24 @@ export const FixModal = ({
   };
 
   const handleReject = (e) => {
-    let fixID = bug._id;
+    let fixID = bug["_id"];
     window.confirm("Are you sure you want to reject")
       ? axios
           .post(
             "/fixhandle",
-            { id: fixID, bugID: bug.bugID, updateStatus: "Reject" },
+            {
+              id: fixID,
+              bugID: bug.bugID,
+              updateStatus: "Reject",
+              sid: cookie.get("session_id"),
+            },
             {
               headers: { "Content-Type": "application/json" },
             }
           )
           .then(() => {
             setAction(!action);
+            navigate("/bug-hunter/dashboard");
           })
           .catch((error) => {
             console.log(error);
@@ -188,7 +212,7 @@ export const FixModal = ({
       </span>
       <span>
         <b>FixID: </b>
-        {bug._id}
+        {bug["_id"]}
       </span>
       <span>
         <b>BugID: </b>
@@ -267,7 +291,7 @@ export const ApprovedModal = ({
       </span>
       <span>
         <b>ID: </b>
-        {bug._id}
+        {bug["_id"]}
       </span>
       <span>
         <b>Bug: </b>

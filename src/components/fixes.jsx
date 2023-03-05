@@ -3,10 +3,18 @@ import React, { useEffect, useState } from "react";
 import { FixModal } from "./modals";
 import { useNavigate } from "react-router-dom";
 import { sortDateAscend, sortDateDesc } from "../functions/filters";
+import { Table, Header } from "semantic-ui-react";
 import axios from "axios";
 export default function Fixes() {
   const navigate = useNavigate();
-  const tableHead = ["FixID", "Description", "Status", "Date", "Action"];
+  const tableHead = [
+    "FixID",
+    "Added By",
+    "Description",
+    "Status",
+    "Date",
+    "Action",
+  ];
   const [fixes, setFixed] = useState(false);
   const [action, setAction] = useState(false);
   const [fixID, setID] = useState(null);
@@ -32,6 +40,8 @@ export default function Fixes() {
         }
       });
   };
+
+
   const handleAction = (e) => {
     setID(e.target.parentNode.parentNode.id);
     setVisibility(true);
@@ -48,14 +58,14 @@ export default function Fixes() {
     <>
       <div className="form-div">
         <h2>Fixes</h2>
-        <table className="bug-list">
-          <thead>
-            <tr>
+        <Table celled inverted selectable>
+          <Table.Header>
+            <Table.Row>
               {tableHead.map((ele, index) =>
                 ele !== "Date" ? (
-                  <th key={index}>{ele}</th>
+                  <Table.HeaderCell key={index}>{ele}</Table.HeaderCell>
                 ) : (
-                  <th
+                  <Table.HeaderCell
                     key={index}
                     id="datehead"
                     style={{ cursor: "pointer" }}
@@ -65,20 +75,27 @@ export default function Fixes() {
                     <span id="sorticon" style={{ marginLeft: "10px" }}>
                       <i className="fa-solid fa-sort"></i>
                     </span>
-                  </th>
+                  </Table.HeaderCell>
                 )
               )}
-            </tr>
-          </thead>
-          <tbody>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
             {fixes.map((fix, index) => {
               return (
-                <tr key={fix._id} className="fix-bug-list-element" id={fix._id}>
-                  <td>{fix._id}</td>
-                  <td>{fix.fixDescription.substr(0, 15) + "...."}</td>
-                  <td>{fix.status}</td>
-                  <td>{fix.createdAt.substr(0, 10)}</td>
-                  <td>
+                <Table.Row
+                  key={fix._id}
+                  className="fix-bug-list-element"
+                  id={fix._id}
+                >
+                  <Table.Cell>{fix._id}</Table.Cell>
+                  <Table.Cell>{fix.fixedBy}</Table.Cell>
+                  <Table.Cell>
+                    {fix.fixDescription.substr(0, 15) + "...."}
+                  </Table.Cell>
+                  <Table.Cell>{fix.status}</Table.Cell>
+                  <Table.Cell>{fix.createdAt.substr(0, 10)}</Table.Cell>
+                  <Table.Cell>
                     <button
                       onClick={handleAction}
                       style={{
@@ -90,12 +107,12 @@ export default function Fixes() {
                     >
                       View
                     </button>
-                  </td>
-                </tr>
+                  </Table.Cell>
+                </Table.Row>
               );
             })}
-          </tbody>
-        </table>
+          </Table.Body>
+        </Table>
       </div>
       <div className={modalVisibility ? "overlay active" : "overlay"}>
         {fixID == null ? (

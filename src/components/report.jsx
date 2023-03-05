@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Cookies from "universal-cookie";
+import { useNavigate } from "react-router-dom";
 export default function Report() {
+  const cookie = new Cookies();
   const [nameExist, setBoolExist] = useState(false);
   const [bugName, setBugName] = useState("");
   const [bugURL, setBugURL] = useState("");
   const [bugMessage, setBugMessage] = useState("");
   const [priority, setPriority] = useState("Select Priority");
+  const navigate = useNavigate();
   const isValidUrl = (string) => {
     try {
       new URL(string);
@@ -46,8 +50,9 @@ export default function Report() {
         },
       })
       .then((response) => {
-        if (response.status === 200) {
+        if (response.status === 201) {
           alert("Success");
+          navigate("bug-hunter/dashboard");
           // document.querySelector("form").reset()
         } else {
           alert("Failure");
@@ -95,6 +100,13 @@ export default function Report() {
           onChange={(e) => {
             setBugName(e.target.value);
           }}
+        />
+        <input
+          type="text"
+          name="reportedBy"
+          hidden
+          required
+          defaultValue={cookie.get("username")}
         />
         <span style={{ color: "#f00" }} id="takenName"></span>
         <input

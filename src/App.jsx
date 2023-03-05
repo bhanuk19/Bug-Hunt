@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Report from "./components/report";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./components/error";
@@ -13,7 +13,7 @@ import Auth from "./components/auth";
 
 const router = createBrowserRouter([
   {
-    path: "/bug-hunter",
+    path: "bug-hunter",
     element: <Root />,
     children: [
       {
@@ -56,7 +56,6 @@ const router = createBrowserRouter([
   },
 ]);
 export default function App() {
-  
   return (
     <React.StrictMode>
       <RouterProvider router={router} />

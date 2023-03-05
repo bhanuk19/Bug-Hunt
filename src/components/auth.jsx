@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setLogins,setAdmin } from "../reducers/globalStates";
+import { setLogins, setAdmin } from "../reducers/globalStates";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 export default function Auth() {
@@ -20,11 +20,15 @@ export default function Auth() {
           }
         )
         .then((res) => {
-          if (res.data) {
+          if (res.data[0]) {
             dispatcher(
-              setLogins([res.data, sessionStorage.getItem("username")])
+              setLogins([res.data, cookie.get("username")]),
+              setAdmin(cookie.get("role") === "true")
             );
-            navigate(-2)
+            navigate("/bug-hunter");
+          } else {
+            cookie.set("session_id", "", { path: "/", expires: new Date() });
+            window.location.href = "http://localhost:3050/?app=bug-hunter";
           }
         });
       return;
@@ -33,13 +37,15 @@ export default function Auth() {
       let session = {};
       for (let p of params) {
         session[p[0]] = p[1];
-        if(p[0]==="role"){
-          dispatcher(setAdmin(p[1]==="true"));
+        if (p[0] === "role") {
+          dispatcher(setAdmin(p[1] === "true"));
         }
         cookie.set(p[0], p[1], { path: "/" });
       }
       if (session["session_id"]) {
         dispatcher(setLogins([true, cookie.get("username")]));
+        console.log(cookie.getAll());
+        dispatcher(setAdmin(cookie.get("role") === "true"));
         navigate("/bug-hunter");
       } else {
         dispatcher(setLogins([false, null]));

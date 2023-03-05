@@ -2,11 +2,11 @@ import { React } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./Styles/style.css";
+import "semantic-ui-css/semantic.min.css";
 import store from "./store";
 import { Provider } from "react-redux";
 import Favicon from "react-favicon";
 import reportWebVitals from "./reportWebVitals";
-import Auth from "./components/auth";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
