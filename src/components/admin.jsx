@@ -6,6 +6,7 @@ import { sortDateAscend, sortDateDesc } from "../functions/filters";
 import { Modal } from "./modals";
 import { useNavigate } from "react-router-dom";
 import { Table, Header, Search, Dropdown, Pagination } from "semantic-ui-react";
+import Cookies from "universal-cookie";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -47,6 +48,11 @@ export default function Admin() {
           setPages(Math.ceil(response.data[1] / 10));
           getUsers();
         }
+      })
+      .catch((err) => {
+        let cookie = new Cookies();
+        cookie.set("session_id", "", { path: "/", expires: new Date() });
+        navigate("/bug-hunter/login");
       });
   };
   const handleAction = (e) => {
@@ -54,7 +60,7 @@ export default function Admin() {
     setVisibility(true);
   };
   const getUsers = () => {
-    axios.get("http://localhost:3050/users").then((resp) => {
+    axios.get("https://backflipt-accounts.onrender.com/users").then((resp) => {
       setUsers(resp.data);
     });
   };

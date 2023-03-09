@@ -9,7 +9,7 @@ export default function Auth() {
   const dispatcher = useDispatch();
   const navigate = useNavigate();
   const cookie = new Cookies();
-  const server = "http://localhost:3050";
+  const server = "https://backflipt-accounts.onrender.com";
   useEffect(() => {
     if (cookie.get("session_id")) {
       axios

@@ -5,7 +5,6 @@ import ErrorPage from "./components/error";
 import Login from "./components/login";
 import Admin from "./components/admin";
 import Root from "./components/root";
-import Signup from "./components/signup";
 import Dashboard from "./components/dashboard";
 import Fix from "./components/fix";
 import Health from "./components/health";

@@ -301,10 +301,6 @@ textarea:focus {
   /* color: #9dbfaf; */
 }
 
-.searchTerm:focus {
-  /* color: #00b4cc; */
-}
-
 .searchButton {
   width: 40px;
   justify-content: center;

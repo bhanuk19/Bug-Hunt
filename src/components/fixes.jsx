@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { sortDateAscend, sortDateDesc } from "../functions/filters";
 import { Sticky, Table } from "semantic-ui-react";
 import axios from "axios";
+import Cookies from "universal-cookie";
 export default function Fixes() {
   const navigate = useNavigate();
   const tableHead = [
@@ -38,6 +39,11 @@ export default function Fixes() {
         } else {
           setFixed(response.data);
         }
+      })
+      .catch((err) => {
+        let cookie = new Cookies();
+        cookie.set("session_id", "", { path: "/", expires: new Date() });
+        navigate("/bug-hunter/login");
       });
   };
 
