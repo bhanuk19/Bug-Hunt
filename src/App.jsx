@@ -8,8 +8,12 @@ import Root from "./components/root";
 import Signup from "./components/signup";
 import Dashboard from "./components/dashboard";
 import Fix from "./components/fix";
+import Health from "./components/health";
 import Fixes from "./components/fixes";
 import Auth from "./components/auth";
+import Fixed from "./components/fixed";
+import Reported from "./components/reported";
+import Assigned from "./components/assigned";
 
 const router = createBrowserRouter([
   {
@@ -19,10 +23,6 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
-      },
-      {
-        path: "signup",
-        element: <Signup />,
       },
       {
         path: "dashboard",
@@ -45,8 +45,24 @@ const router = createBrowserRouter([
         element: <Admin />,
       },
       {
+        path: "assigned",
+        element: <Assigned />,
+      },
+      {
         path: "authenticate",
         element: <Auth />,
+      },
+      {
+        path: "profile/bugs",
+        element: <Reported />,
+      },
+      {
+        path: "profile/fixes",
+        element: <Fixed />,
+      },
+      {
+        path: "health",
+        element: <Health />,
       },
       {
         path: "*",

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Icon, Menu, Sidebar } from "semantic-ui-react";
+import { Icon, Menu, Sidebar, Dropdown } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import Cookies from "universal-cookie";
 function Overlay() {
@@ -63,6 +63,37 @@ function NavbarMb({ logged, destroySession }) {
       >
         {logged ? (
           <>
+            <Menu.Menu position="right">
+              <Dropdown
+                text={cookie.get("username")}
+                simple
+                className="link item"
+                direction="right"
+                style={{fontSize: "20px"}}
+              >
+                <Dropdown.Menu>
+                  <Dropdown.Header>Action Center</Dropdown.Header>
+                  <Dropdown.Item as={Link} to="profile/bugs">
+                    Your Bugs
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="profile/fixes">
+                    Your Fixes
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Header>Bye....</Dropdown.Header>
+                  <Dropdown.Item
+                    name="Logout"
+                    active={activeItem === "Logout"}
+                    onClick={destroySession}
+                    position="right"
+                    style={{ background: "#BB3F3F" }}
+                  >
+                    Logout{" "}
+                    <Icon name="log out" style={{ marginLeft: "5px" }}></Icon>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Menu.Menu>
             <Menu.Item
               name="Dashboard"
               active={activeItem === "Dashboard"}
@@ -87,6 +118,13 @@ function NavbarMb({ logged, destroySession }) {
                   as={Link}
                   to="reported"
                 />
+                <Menu.Item
+                  name="Analytics"
+                  active={activeItem === "Analytics"}
+                  onClick={handleItemClick}
+                  as={Link}
+                  to="analytics"
+                />
               </>
             ) : (
               <></>
@@ -105,16 +143,6 @@ function NavbarMb({ logged, destroySession }) {
               as={Link}
               to="report"
             />
-
-            <Menu.Item
-              name="Logout"
-              active={activeItem === "Logout"}
-              onClick={destroySession}
-              position="right"
-              style={{ background: "#BB3F3F" }}
-            >
-              Logout <Icon name="log out"></Icon>
-            </Menu.Item>
           </>
         ) : (
           <Menu.Item

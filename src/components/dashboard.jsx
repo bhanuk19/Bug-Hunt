@@ -52,12 +52,12 @@ export default function Dashboard(props) {
     setAscend(!ascend);
   };
   return (
-    <div className="dash-div">
+    <>
       {approvedBugs ? (
         <>
           <div className="form-div">
             <Header size="huge">Approved Bugs</Header>
-            <Table celled inverted selectable>
+            <Table celled inverted selectable fixed>
               <Table.Header>
                 <Table.Row>
                   {tableHead.map((ele, index) =>
@@ -89,17 +89,43 @@ export default function Dashboard(props) {
                     >
                       <Table.Cell>{reported._id}</Table.Cell>
                       <Table.Cell>{reported.bugName}</Table.Cell>
-                      <Table.Cell>{reported.reportedBy?reported.reportedBy:"Anonymous"}</Table.Cell>
+                      <Table.Cell>
+                        {reported.reportedBy
+                          ? reported.reportedBy
+                          : "Anonymous"}
+                      </Table.Cell>
                       <Table.Cell>
                         {reported.bugDescription.substr(0, 15) + "...."}
                       </Table.Cell>
                       <Table.Cell
                         style={
                           reported.priority === "Critical"
-                            ? { background: "#EC0A00" }
+                            ? {
+                                background: "#EC0A00",
+                                margin: "0",
+                                color: "white",
+                                fontWeight: "bold",
+                              }
                             : reported.priority === "Moderate"
-                            ? { background: "#066CC3" }
-                            : { background: "#08B256" }
+                            ? {
+                                background: "#066CC3",
+                                margin: "0",
+                                color: "white",
+                                fontWeight: "bold",
+                              }
+                            : reported.priority === "Major"
+                            ? {
+                                background: "#F6C105",
+                                margin: "0",
+                                color: "white",
+                                fontWeight: "bold",
+                              }
+                            : {
+                                background: "#08B256",
+                                margin: "0",
+                                color: "white",
+                                fontWeight: "bold",
+                              }
                         }
                       >
                         {reported.priority ? reported.priority : "Low"}
@@ -145,6 +171,6 @@ export default function Dashboard(props) {
       ) : (
         <h1>Loading......</h1>
       )}
-    </div>
+    </>
   );
 }

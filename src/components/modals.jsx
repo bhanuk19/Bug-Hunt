@@ -26,7 +26,6 @@ export const Modal = ({
             {
               id: bugID,
               updateStatus: "Approved",
-              sid: cookie.get("session_id"),
             },
             {
               headers: { "Content-Type": "application/json" },
@@ -50,7 +49,6 @@ export const Modal = ({
             {
               id: bugID,
               updateStatus: "Rejected",
-              sid: cookie.get("session_id"),
             },
             {
               headers: { "Content-Type": "application/json" },
@@ -83,16 +81,44 @@ export const Modal = ({
           className="modal-badge"
           style={
             bug.priority === "Critical"
-              ? { background: "#EC0A00" }
+              ? {
+                  background: "#EC0A00",
+                  margin: "0",
+                  color: "white",
+                  fontWeight: "bold",
+                }
               : bug.priority === "Moderate"
-              ? { background: "#066CC3" }
-              : { background: "#08B256" }
+              ? {
+                  background: "#066CC3",
+                  margin: "0",
+                  color: "white",
+                  fontWeight: "bold",
+                }
+              : bug.priority === "Major"
+              ? {
+                  background: "#F6C105",
+                  margin: "0",
+                  color: "white",
+                  fontWeight: "bold",
+                }
+              : {
+                  background: "#08B256",
+                  margin: "0",
+                  color: "white",
+                  fontWeight: "bold",
+                }
           }
         >
           {bug.priority}
         </sub>
       </span>
-      <span>
+      <span
+        style={{
+          display: "inline-block",
+          width: "100%",
+          "word-wrap": "break-word",
+        }}
+      >
         <b>Description: </b>
         <br />
         {bug.bugDescription}
@@ -128,14 +154,18 @@ export const Modal = ({
         <b>Last Updated on: </b>
         {bug.updatedAt.substr(0, 10) + " @ " + bug.updatedAt.substr(11, 8)}
       </span>
-      <div>
-        <button onClick={handleApproval} style={{ background: "#218838" }}>
-          Approve
-        </button>
-        <button onClick={handleReject} style={{ background: "#DC3545" }}>
-          Reject
-        </button>
-      </div>
+      {bug.status === "Fixed" ? (
+        <></>
+      ) : (
+        <div>
+          <button onClick={handleApproval} style={{ background: "#218838" }}>
+            Approve
+          </button>
+          <button onClick={handleReject} style={{ background: "#DC3545" }}>
+            Reject
+          </button>
+        </div>
+      )}
     </div>
   );
 };
@@ -161,7 +191,6 @@ export const FixModal = ({
               id: fixID,
               bugID: bug.bugID,
               updateStatus: "Fixed",
-              sid: cookie.get("session_id"),
             },
             {
               headers: { "Content-Type": "application/json" },
@@ -187,7 +216,6 @@ export const FixModal = ({
               id: fixID,
               bugID: bug.bugID,
               updateStatus: "Reject",
-              sid: cookie.get("session_id"),
             },
             {
               headers: { "Content-Type": "application/json" },
@@ -218,7 +246,13 @@ export const FixModal = ({
         <b>BugID: </b>
         {bug.bugID}
       </span>
-      <span>
+      <span
+        style={{
+          display: "inline-block",
+          width: "100%",
+          "word-wrap": "break-word",
+        }}
+      >
         <b>Description: </b>
         <br />
         {bug.fixDescription}
@@ -254,6 +288,7 @@ export const FixModal = ({
         <b>Last Updated on: </b>
         {bug.updatedAt.substr(0, 10) + " @ " + bug.updatedAt.substr(11, 8)}
       </span>
+
       <div>
         <button onClick={handleApproval} style={{ background: "#218838" }}>
           Approve
@@ -300,16 +335,48 @@ export const ApprovedModal = ({
           className="modal-badge"
           style={
             bug.priority === "Critical"
-              ? { background: "#EC0A00" }
+              ? {
+                  background: "#EC0A00",
+                  margin: "0",
+                  color: "white",
+                  fontWeight: "bold",
+                }
               : bug.priority === "Moderate"
-              ? { background: "#066CC3" }
-              : { background: "#08B256" }
+              ? {
+                  background: "#066CC3",
+                  margin: "0",
+                  color: "white",
+                  fontWeight: "bold",
+                }
+              : bug.priority === "Major"
+              ? {
+                  background: "#F6C105",
+                  margin: "0",
+                  color: "white",
+                  fontWeight: "bold",
+                }
+              : {
+                  background: "#08B256",
+                  margin: "0",
+                  color: "white",
+                  fontWeight: "bold",
+                }
           }
         >
           {bug.priority}
         </sub>
       </span>
       <span>
+        <b>Reported By: </b>
+        {bug.repotedBy ? bug.repotedBy : "Anonymous"}
+      </span>
+      <span
+        style={{
+          display: "inline-block",
+          width: "100%",
+          "word-wrap": "break-word",
+        }}
+      >
         <b>Description: </b>
         <br />
         {bug.bugDescription}

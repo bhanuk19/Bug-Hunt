@@ -52,7 +52,7 @@ export default function Report() {
       .then((response) => {
         if (response.status === 201) {
           alert("Success");
-          navigate("bug-hunter/dashboard");
+          navigate("/dashboard");
           // document.querySelector("form").reset()
         } else {
           alert("Failure");
@@ -142,6 +142,7 @@ export default function Report() {
           <option value="Select Priority">Select Priority</option>
           <option value="Low">Low</option>
           <option value="Moderate">Moderate</option>
+          <option value="Major">Major</option>
           <option value="Critical">Critical</option>
         </select>
       </form>

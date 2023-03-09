@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FixModal } from "./modals";
 import { useNavigate } from "react-router-dom";
 import { sortDateAscend, sortDateDesc } from "../functions/filters";
-import { Table, Header } from "semantic-ui-react";
+import { Sticky, Table } from "semantic-ui-react";
 import axios from "axios";
 export default function Fixes() {
   const navigate = useNavigate();
@@ -41,7 +41,6 @@ export default function Fixes() {
       });
   };
 
-
   const handleAction = (e) => {
     setID(e.target.parentNode.parentNode.id);
     setVisibility(true);
@@ -58,28 +57,30 @@ export default function Fixes() {
     <>
       <div className="form-div">
         <h2>Fixes</h2>
-        <Table celled inverted selectable>
-          <Table.Header>
-            <Table.Row>
-              {tableHead.map((ele, index) =>
-                ele !== "Date" ? (
-                  <Table.HeaderCell key={index}>{ele}</Table.HeaderCell>
-                ) : (
-                  <Table.HeaderCell
-                    key={index}
-                    id="datehead"
-                    style={{ cursor: "pointer" }}
-                    onClick={sortFunction}
-                  >
-                    {ele}
-                    <span id="sorticon" style={{ marginLeft: "10px" }}>
-                      <i className="fa-solid fa-sort"></i>
-                    </span>
-                  </Table.HeaderCell>
-                )
-              )}
-            </Table.Row>
-          </Table.Header>
+        <Table celled inverted selectable fixed>
+          <Sticky>
+            <Table.Header>
+              <Table.Row>
+                {tableHead.map((ele, index) =>
+                  ele !== "Date" ? (
+                    <Table.HeaderCell key={index}>{ele}</Table.HeaderCell>
+                  ) : (
+                    <Table.HeaderCell
+                      key={index}
+                      id="datehead"
+                      style={{ cursor: "pointer" }}
+                      onClick={sortFunction}
+                    >
+                      {ele}
+                      <span id="sorticon" style={{ marginLeft: "10px" }}>
+                        <i className="fa-solid fa-sort"></i>
+                      </span>
+                    </Table.HeaderCell>
+                  )
+                )}
+              </Table.Row>
+            </Table.Header>
+          </Sticky>
           <Table.Body>
             {fixes.map((fix, index) => {
               return (

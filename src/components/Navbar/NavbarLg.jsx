@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Icon, Menu, Segment } from "semantic-ui-react";
+import { Icon, Menu, Segment, Dropdown } from "semantic-ui-react";
 import Cookies from "universal-cookie";
 export default function NavbarLg({ destroySession, logged }) {
   const cookie = new Cookies();
@@ -35,6 +35,13 @@ export default function NavbarLg({ destroySession, logged }) {
                   as={Link}
                   to="reported"
                 />
+                <Menu.Item
+                  name="Analytics"
+                  active={activeItem === "Analytics"}
+                  onClick={handleItemClick}
+                  as={Link}
+                  to="analytics"
+                />
               </>
             ) : (
               <></>
@@ -54,15 +61,32 @@ export default function NavbarLg({ destroySession, logged }) {
               to="report"
             />
 
-            <Menu.Item
-              name="Logout"
-              active={activeItem === "Logout"}
-              onClick={destroySession}
-              position="right"
-              style={{ background: "#BB3F3F" }}
-            >
-              Logout <Icon name="log out" style={{marginLeft:"5px"}}></Icon>
-            </Menu.Item>
+            <Menu.Menu position="right">
+              <Dropdown
+                text={cookie.get("username")}
+                simple
+                className="link item"
+                direction="right"
+              >
+                <Dropdown.Menu>
+                  <Dropdown.Header>Action Center</Dropdown.Header>
+                  <Dropdown.Item as={Link} to="profile/bugs">Your Bugs</Dropdown.Item>
+                  <Dropdown.Item as={Link} to="profile/fixes">Your Fixes</Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Header>Bye....</Dropdown.Header>
+                  <Dropdown.Item
+                    name="Logout"
+                    active={activeItem === "Logout"}
+                    onClick={destroySession}
+                    position="right"
+                    style={{ background: "#BB3F3F" }}
+                  >
+                    Logout{" "}
+                    <Icon name="log out" style={{ marginLeft: "5px" }}></Icon>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Menu.Menu>
           </>
         ) : (
           <Menu.Item

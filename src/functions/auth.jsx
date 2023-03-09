@@ -13,7 +13,7 @@ export const checkAuth = async () => {
     );
     return res.data[0];
   } else {
-    cookie.set("session_id", "", { path: "/", expires: new Date() });
+    // cookie.set("session_id", "", { path: "/", expires: new Date() });
     return false;
   }
 };

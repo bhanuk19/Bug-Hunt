@@ -4,11 +4,12 @@ import { useDispatch } from "react-redux";
 import { setLogins, setAdmin } from "../reducers/globalStates";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
+
 export default function Auth() {
   const dispatcher = useDispatch();
   const navigate = useNavigate();
   const cookie = new Cookies();
-
+  const server = "http://localhost:3050";
   useEffect(() => {
     if (cookie.get("session_id")) {
       axios
@@ -28,7 +29,7 @@ export default function Auth() {
             navigate("/bug-hunter");
           } else {
             cookie.set("session_id", "", { path: "/", expires: new Date() });
-            window.location.href = "http://localhost:3050/?app=bug-hunter";
+            window.location.href = server + "/?app=bug-hunter";
           }
         });
       return;
@@ -49,7 +50,7 @@ export default function Auth() {
         navigate("/bug-hunter");
       } else {
         dispatcher(setLogins([false, null]));
-        window.location.href = "http://localhost:3050/?app=bug-hunter";
+        window.location.href = server + "/?app=bug-hunter";
       }
     }
   });
