@@ -13,6 +13,7 @@ import Auth from "./components/auth";
 import Fixed from "./components/fixed";
 import Reported from "./components/reported";
 import Assigned from "./components/assigned";
+import Analytics from "./components/analytics";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "",
+        element: <Dashboard />,
       },
       {
         path: "dashboard",
@@ -48,6 +53,10 @@ const router = createBrowserRouter([
         element: <Assigned />,
       },
       {
+        path: "analytics",
+        element: <Analytics />,
+      },
+      {
         path: "authenticate",
         element: <Auth />,
       },
@@ -72,8 +81,9 @@ const router = createBrowserRouter([
 ]);
 export default function App() {
   return (
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>
+    <RouterProvider router={router} />
+    // <React.StrictMode>
+
+    // </React.StrictMode>
   );
 }

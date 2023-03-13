@@ -64,7 +64,6 @@ export default function Fixes() {
       <div className="form-div">
         <h2>Fixes</h2>
         <Table celled inverted selectable fixed>
-          <Sticky>
             <Table.Header>
               <Table.Row>
                 {tableHead.map((ele, index) =>
@@ -86,7 +85,6 @@ export default function Fixes() {
                 )}
               </Table.Row>
             </Table.Header>
-          </Sticky>
           <Table.Body>
             {fixes.map((fix, index) => {
               return (
@@ -98,7 +96,7 @@ export default function Fixes() {
                   <Table.Cell>{fix._id}</Table.Cell>
                   <Table.Cell>{fix.fixedBy}</Table.Cell>
                   <Table.Cell>
-                    {fix.fixDescription.substr(0, 15) + "...."}
+                    {fix.fixDescription.substr(0, 10) + "...."}
                   </Table.Cell>
                   <Table.Cell>{fix.status}</Table.Cell>
                   <Table.Cell>{fix.createdAt.substr(0, 10)}</Table.Cell>

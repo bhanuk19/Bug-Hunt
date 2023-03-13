@@ -22,6 +22,9 @@ export const checkAuth = async () => {
 
 export const logout = async () => {
   let flag = false;
+  if (!cookie.get("session_id")) {
+    return true;
+  }
   await axios
     .post(
       "/logout",
