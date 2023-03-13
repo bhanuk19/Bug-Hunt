@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import Report from "./components/report";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./components/error";
 import Login from "./components/login";
 import Admin from "./components/admin";
 import Root from "./components/root";
-import Signup from "./components/signup";
 import Dashboard from "./components/dashboard";
 import Fix from "./components/fix";
+import Health from "./components/health";
 import Fixes from "./components/fixes";
+import Auth from "./components/auth";
+import Fixed from "./components/fixed";
+import Reported from "./components/reported";
+import Assigned from "./components/assigned";
+import Analytics from "./components/analytics";
+
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "bug-hunter",
     element: <Root />,
     children: [
       {
@@ -19,8 +25,8 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "signup",
-        element: <Signup />,
+        path: "",
+        element: <Dashboard />,
       },
       {
         path: "dashboard",
@@ -43,6 +49,30 @@ const router = createBrowserRouter([
         element: <Admin />,
       },
       {
+        path: "assigned",
+        element: <Assigned />,
+      },
+      {
+        path: "analytics",
+        element: <Analytics />,
+      },
+      {
+        path: "authenticate",
+        element: <Auth />,
+      },
+      {
+        path: "profile/bugs",
+        element: <Reported />,
+      },
+      {
+        path: "profile/fixes",
+        element: <Fixed />,
+      },
+      {
+        path: "health",
+        element: <Health />,
+      },
+      {
         path: "*",
         element: <ErrorPage />,
       },
@@ -50,10 +80,10 @@ const router = createBrowserRouter([
   },
 ]);
 export default function App() {
-  const [selectedBug, setSelected] = useState("null");
   return (
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>
+    <RouterProvider router={router} />
+    // <React.StrictMode>
+
+    // </React.StrictMode>
   );
 }

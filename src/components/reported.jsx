@@ -6,14 +6,14 @@ import { sortDateAscend, sortDateDesc } from "../functions/filters";
 // import { useDispatch } from "react-redux";
 // import { setAdmin, setLogins } from "../reducers/globalStates";
 // import { useNavigate } from "react-router-dom";
-// import Cookies from "universal-cookie";
+import Cookies from "universal-cookie";
 import { Table, Header } from "semantic-ui-react";
-export default function Dashboard(props) {
+export default function Reported(props) {
   //Local States
-  // const cookie = new Cookies();
+  const cookie = new Cookies();
   // const dispatcher = useDispatch();
   // const navigate = useNavigate();
-  const [approvedBugs, setApproved] = useState(false);
+  const [userBugs, setUserBugs] = useState(false);
   const [ascend, setAscend] = useState(false);
   const [action, setAction] = useState(false);
   const [bugID, setID] = useState(null);
@@ -30,14 +30,15 @@ export default function Dashboard(props) {
   useEffect(() => {});
   useEffect(() => {
     let mounted = true;
-    axios.get("/bugs").then((response) => {
+    axios.get("/userBugs/" + cookie.get("username")).then((response) => {
       if (mounted) {
-        setApproved(response.data);
+        setUserBugs(response.data);
+        // console.log(response.data);
       }
     });
     return () => (mounted = false);
   }, []);
-  useEffect(() => {}, [approvedBugs]);
+  useEffect(() => {}, [userBugs]);
 
   //Show Modal function
   const handleAction = (e) => {
@@ -47,16 +48,16 @@ export default function Dashboard(props) {
   //Sort Table based on
   const sortFunction = () => {
     ascend
-      ? setApproved(sortDateDesc(approvedBugs))
-      : setApproved(sortDateAscend(approvedBugs));
+      ? setUserBugs(sortDateDesc(userBugs))
+      : setUserBugs(sortDateAscend(userBugs));
     setAscend(!ascend);
   };
   return (
     <>
-      {approvedBugs ? (
+      {userBugs ? (
         <>
           <div className="form-div">
-            <Header size="huge">Approved Bugs</Header>
+            <Header size="huge">Reported By You</Header>
             <Table celled inverted selectable fixed>
               <Table.Header>
                 <Table.Row>
@@ -80,7 +81,7 @@ export default function Dashboard(props) {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {approvedBugs.map((reported, index) => {
+                {userBugs.map((reported, index) => {
                   return (
                     <Table.Row
                       key={reported._id}
@@ -95,7 +96,9 @@ export default function Dashboard(props) {
                           : "Anonymous"}
                       </Table.Cell>
                       <Table.Cell>
-                        {reported.bugDescription.substr(0, 15) + "...."}
+                        {reported.bugDescription
+                          ? reported.bugDescription.substr(0, 15) + "...."
+                          : "NULL"}
                       </Table.Cell>
                       <Table.Cell
                         style={
@@ -162,7 +165,7 @@ export default function Dashboard(props) {
                 setVisibility={setVisibility}
                 setAction={setAction}
                 id={bugID}
-                bugs={approvedBugs}
+                bugs={userBugs}
                 action={action}
               />
             )}

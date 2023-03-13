@@ -1,13 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import FixModal from "./fixmodal";
+import { FixModal } from "./modals";
 import { useNavigate } from "react-router-dom";
+import { sortDateAscend, sortDateDesc } from "../functions/filters";
+import { Sticky, Table } from "semantic-ui-react";
 import axios from "axios";
+import Cookies from "universal-cookie";
 export default function Fixes() {
   const navigate = useNavigate();
   const tableHead = [
     "FixID",
-    "BugID",
+    "Added By",
     "Description",
+    "Status",
     "Date",
     "Action",
   ];
@@ -30,43 +35,72 @@ export default function Fixes() {
       .then((response) => {
         if (response.data?.auth === false) {
           alert("Unauthorized");
-          navigate("/dashboard", { replace: true });
+          navigate("/dashboard");
         } else {
           setFixed(response.data);
         }
+      })
+      .catch((err) => {
+        let cookie = new Cookies();
+        cookie.set("session_id", "", { path: "/", expires: new Date() });
+        navigate("/bug-hunter/login");
       });
   };
+
   const handleAction = (e) => {
     setID(e.target.parentNode.parentNode.id);
     setVisibility(true);
   };
-  //   const setModal = () =>{
 
-  //   }
-  //   setInterval(getBugs, 1000);
+  const [ascend, setAscend] = useState(false);
+  const sortFunction = () => {
+    ascend ? setFixed(sortDateDesc(fixes)) : setFixed(sortDateAscend(fixes));
+    setAscend(!ascend);
+  };
+
   useEffect(getFixes, [action]);
   return fixes ? (
     <>
       <div className="form-div">
         <h2>Fixes</h2>
-        <table className="bug-list">
-          <thead>
-            <tr>
-              {tableHead.map((ele, index) => {
-                return <th key={index}>{ele}</th>;
-              })}
-            </tr>
-          </thead>
-          <tbody>
+        <Table celled inverted selectable fixed>
+            <Table.Header>
+              <Table.Row>
+                {tableHead.map((ele, index) =>
+                  ele !== "Date" ? (
+                    <Table.HeaderCell key={index}>{ele}</Table.HeaderCell>
+                  ) : (
+                    <Table.HeaderCell
+                      key={index}
+                      id="datehead"
+                      style={{ cursor: "pointer" }}
+                      onClick={sortFunction}
+                    >
+                      {ele}
+                      <span id="sorticon" style={{ marginLeft: "10px" }}>
+                        <i className="fa-solid fa-sort"></i>
+                      </span>
+                    </Table.HeaderCell>
+                  )
+                )}
+              </Table.Row>
+            </Table.Header>
+          <Table.Body>
             {fixes.map((fix, index) => {
               return (
-                <tr key={fix._id} className="fix-bug-list-element" id={fix._id}>
-                  <td>{fix._id}</td>
-                  <td>{fix.bugID}</td>
-                  <td>{fix.fixDescription.substr(0, 15) + "...."}</td>
-
-                  <td>{fix.createdAt.substr(0, 10)}</td>
-                  <td>
+                <Table.Row
+                  key={fix._id}
+                  className="fix-bug-list-element"
+                  id={fix._id}
+                >
+                  <Table.Cell>{fix._id}</Table.Cell>
+                  <Table.Cell>{fix.fixedBy}</Table.Cell>
+                  <Table.Cell>
+                    {fix.fixDescription.substr(0, 10) + "...."}
+                  </Table.Cell>
+                  <Table.Cell>{fix.status}</Table.Cell>
+                  <Table.Cell>{fix.createdAt.substr(0, 10)}</Table.Cell>
+                  <Table.Cell>
                     <button
                       onClick={handleAction}
                       style={{
@@ -78,12 +112,12 @@ export default function Fixes() {
                     >
                       View
                     </button>
-                  </td>
-                </tr>
+                  </Table.Cell>
+                </Table.Row>
               );
             })}
-          </tbody>
-        </table>
+          </Table.Body>
+        </Table>
       </div>
       <div className={modalVisibility ? "overlay active" : "overlay"}>
         {fixID == null ? (
